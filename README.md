@@ -16,8 +16,14 @@ Another use case is for CI/CD pipelines. You can use `envsk` to check that the s
 # list all secrets
 $ envsk
 
-# list secrets with a prefix
-$ envsk | grep SECRET
+# list secrets with starting with uppercase "^VAULT":
+$ envsk --filter="^VAULT"
+VAULT_ADDR=********
+
+# list secrets with containing an uppercase V ending with an uppercase R:
+$ envsk --filter=".*V.*R$"
+VAULT_ADDR=********
+NVM_DIR=********
 ```
 
 ## Installation

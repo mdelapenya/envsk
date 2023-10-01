@@ -1,24 +1,46 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
+	"regexp"
 )
 
+var filter *string
+
+func init() {
+	filter = flag.String("filter", "", `Regular expression to filter environment variables. E.g.: --filter=".*V.*R$"`)
+}
+
 func main() {
-	m := envVarsMap()
+	flag.Parse()
+
+	m := envVarsMap(*filter)
 
 	for k := range m {
 		fmt.Printf("%s=%s\n", k, "********")
 	}
 }
 
-func envVarsMap() map[string]string {
+func envVarsMap(filter string) map[string]string {
 	envMap := make(map[string]string)
+
+	regexp, err := regexp.Compile(filter)
+	if err != nil {
+		panic(err)
+	}
 
 	envVars := os.Environ()
 	for _, envVar := range envVars {
 		varName, varValue := splitEnvVar(envVar)
+
+		if filter != "" {
+			if !regexp.MatchString(varName) {
+				continue
+			}
+
+		}
 
 		envMap[varName] = varValue
 	}
