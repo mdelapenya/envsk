@@ -8,8 +8,8 @@ import (
 func main() {
 	m := envVarsMap()
 
-	for k, v := range m {
-		fmt.Printf("%s=%s\n", k, v)
+	for k := range m {
+		fmt.Printf("%s=%s\n", k, "********")
 	}
 }
 
